@@ -1,0 +1,9 @@
+# root directories
+.tmp
+
+# module files
+*/private.sh
+
+# python files
+__pycache__
+*.pyc
