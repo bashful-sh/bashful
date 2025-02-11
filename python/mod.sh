@@ -1,6 +1,10 @@
 #!/bin/bash
+# python/mod.sh
+#
+# Default built-in python wrapper for bashful,
+# adds multiple system shortcut functions with
+# the support of a local virtual environment.
 
-# Define Environment
 export BPY_INSTALL="$BASHFUL_DIR/python/install.sh"
 export BPY_VENV="$BASHFUL_DIR/.tmp/pyvenv"
 export BPY_BIN="$BPY_VENV/bin"
@@ -8,15 +12,15 @@ export BPY="$BPY_BIN/python3"
 export BPIP="$BPY_BIN/python3 -m pip"
 export BVENV="$BPY_BIN/activate"
 
-# Define Path Additions
-
-# Define Module
 alias bpy='$BPY'
-alias bpip='$BPIP'
-alias bvenv='source $BVENV'
-alias bpy.mods='bpip freeze'
+alias bpy.pip='$BPIP'
+alias bpy.env='source $BVENV'
+alias bpy.lib='$BPY -m pip freeze'
 
-# Define Functions
+function bpy_script() {
+  bpy "$BASHFUL_DIR"/python/scripts/$1.py
+}
+
 function http() {
-  bpy -m http.server "$@"
+  bpy_script http
 }

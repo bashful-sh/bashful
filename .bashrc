@@ -1,7 +1,6 @@
-if [ -d "$HOME/.bashful" ]; then
-  . "$HOME/.bashful/main.sh"
-else
-  if [ -d "$HOME/.bashful-git" ]; then
-    . "$HOME/.bashful-git/main.sh"
-  fi
-fi
+#!/bin/bash
+# Name: .bashrc
+# Desc: default user bashrc template
+# Version: 1.0.x
+
+. "/opt/bashful/src/main.sh"

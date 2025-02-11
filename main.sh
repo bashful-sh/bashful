@@ -1,71 +1,58 @@
 #!/bin/bash
-# Name: Bashful
-# Desc: Debian/Ubuntu shell script package manager
-# Git ssh: github:oceaster/bashful.git
-# Version: 1.0.0
+# Name: main.sh
+# Desc: the main entry file (imported by bash)
+# Version: 1.0.x
 
-# System information
-platform=$(uname)
-architecture=$(uname -p)
-
-export PLATFORM="$platform"
-export ARCHITECTURE="$architecture"
-
-# Root directory
-if [ -d "$HOME/.bashful" ]; then
-  export BASHFUL_DIR="$HOME/.bashful"
-  export BASHFUL="$BASHFUL_DIR"
-
-else
-  if [ -d "$HOME/.bashful-git" ]; then
-    export BASHFUL_DIR="$HOME/.bashful-git"
-  fi
-fi
-
-# Temporary directory
-export BASHFUL_TMP="$BASHFUL_DIR/.tmp"
-if ! [ -d "$BASHFUL_TMP" ]; then
-  mkdir -p "$BASHFUL_TMP"
-fi
-
-# Version information
+# bashful information
+export BASHFUL_OPT="/opt/bashful"
+export BASHFUL_DIR="$BASHFUL_OPT/src"
+export BASHFUL_GIT="$BASHFUL_DIR/.git"
 channel=""
 branch=""
 commit=""
 release=""
-version="0.0.0"
+version="1.0.0"
 
-if [ -d "$BASHFUL_DIR/.git" ]; then
+if [ -d $BASHFUL_GIT ]; then
   channel="git"
   branch=$(git rev-parse --abbrev-ref HEAD)
   commit=$(git rev-parse --short HEAD)
   release="$branch-$commit@$channel"
   version="$version@$platform-$architecture"
 else
-  channel="oceaster.github.io"
+  channel="bashful-sh.github.io/bashful"
   branch="lts"
   commit="2025"
   release="$branch-$commit@$channel"
   version="$version@$platform-$architecture"
 fi
 
-# Commit information
+export BASHFUL_CHANNEL=$channel
+export BASHFUL_BRANCH=$branch
+export BASHFUL_COMMIT=$commit
+export BASHFUL_RELEASE=$release
+export BASHFUL_VERSION=$version
+
+export BASHFUL_TMP="$BASHFUL_DIR/.tmp"
+if ! [ -d "$BASHFUL_TMP" ]; then
+  mkdir -p "$BASHFUL_TMP"
+fi
+
 export BASHFUL_RELEASE_TYPE=$release_type
 export BASHFUL_VERSION="$version"
 export BASHFUL_RELEASE="$release"
 export BASHFUL_COMMIT_ID="$commit"
 
-# Reset
-export COFF='\033[0m' # Text Reset
-
-# Regular Colors
-export CRED='\033[0;31m'   # Red
-export CGREEN='\033[0;32m' # Green
-export CDIM='\033[0;2m'    # White
-
-# Bold
+export COFF='\033[0m'           # Text Reset
+export CRED='\033[0;31m'        # Red
+export CGREEN='\033[0;32m'      # Green
+export CDIM='\033[0;2m'         # White
 export CBOLD='\033[1m'          # Bold White
 export CBOLD_GREEN='\033[1;32m' # Bold Green
+
+function bashful() {
+  echo $BASHFUL_RELEASE
+}
 
 function inherit_absolute_module() {
   if [ -d "$1" ]; then
@@ -110,7 +97,6 @@ function rmtmp() {
   mkdir "$BASHFUL_TMP/$1"
 }
 
-# Built-in Applications Library
 inherit_builtin profile
 inherit_builtin apt
 inherit_builtin python
@@ -119,8 +105,3 @@ inherit_builtin bun
 inherit_builtin redis
 inherit_builtin redis-cloud
 inherit_builtin ollama
-
-# Define main entry point function
-function bashful() {
-  echo $BASHFUL_RELEASE
-}
