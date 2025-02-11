@@ -1,12 +1,14 @@
-# Bashful
+<img align="center" src="https://bashful-sh.github.io/static/meta/preview-banner-transparent.png" width="100%" height="auto"/>
 
-Universal Bash & Shell script bundle and package manager for Ubuntu/Debian
-based Linux distributions.
+### Index of Contents
 
-To automatically install, simply run the following command:
+Click any of these links to go to the resource.
 
-```sh
-curl -fsSL https://bashful-sh.github.io/install.sh | bash
-```
+- [Introduction](https://bashful-sh.github.io/)
+- [Install & Download](https://bashful-sh.github.io/)
+- [Basic Usage](https://bashful-sh.github.io/)
+- [Advanced Usage](https://bashful-sh.github.io/)
 
-For more information please visit the GitHub wiki.
+### Introduction
+
+Bashful is a bash profile and package manager. That means you can download and install it, then it will become your interface for managing your bash environment and the appearance of your terminal output.
