@@ -22,5 +22,5 @@ function bpy_script() {
 }
 
 function http() {
-  bpy_script http
+  bpy -m http.server "$@"
 }
