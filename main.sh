@@ -4,8 +4,7 @@
 # Version: 1.0.x
 
 # bashful information
-export BASHFUL_OPT="/opt/bashful"
-export BASHFUL_DIR="$BASHFUL_OPT/src"
+export BASHFUL_DIR="$HOME/.bashful"
 export BASHFUL_GIT="$BASHFUL_DIR/.git"
 channel=""
 branch=""
