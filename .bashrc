@@ -3,4 +3,4 @@
 # Desc: default user bashrc template
 # Version: 1.0.x
 
-. "~/.bashful/main.sh"
+. "$HOME/.bashful/main.sh"
