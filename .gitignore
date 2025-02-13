@@ -1,5 +1,6 @@
 # root directories
-.tmp
+/.tmp
+/docs
 
 # module files
 */private.sh
