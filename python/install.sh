@@ -7,7 +7,6 @@ if ! [ -d "$venv" ]; then
   export BPY_BIN="$BPY_VENV/bin"
   export BPY="$BPY_BIN/python3"
   source "$BPY_VENV/bin/activate"
-  pip install pip-tools
-  pip install -r "$BASHFUL_DIR/python/requirements.txt"
+  pip install --upgrade -r "$BASHFUL_DIR/python/requirements.txt"
   deactivate
 fi

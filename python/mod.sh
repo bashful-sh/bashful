@@ -23,7 +23,7 @@ function bpy-script() {
 
 function bpy-update() {
   source "$BPY_VENV/bin/activate"
-  pip install --upgrade pip-tools && pip-sync "$BASHFUL_DIR/python/requirements.txt"
+  pip install --upgrade -r "$BASHFUL_DIR/python/requirements.txt"
   deactivate
 }
 
