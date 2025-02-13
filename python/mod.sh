@@ -17,10 +17,28 @@ alias bpy.pip='$BPIP'
 alias bpy.env='source $BVENV'
 alias bpy.lib='$BPY -m pip freeze'
 
-function bpy_script() {
-  bpy "$BASHFUL_DIR"/python/scripts/$1.py
+function bpy-script() {
+  bpy "$BASHFUL_DIR/python/scripts/$1.py"
 }
 
-function http() {
+function bpy-update() {
+  source "$BPY_VENV/bin/activate"
+  pip install --upgrade pip-tools && pip-sync "$BASHFUL_DIR/python/requirements.txt"
+  deactivate
+}
+
+function serve() {
   bpy -m http.server "$@"
+}
+
+function torch() {
+  bpy -c "import torch; print(f'PyTorch: {torch.__version__}'); print(f'CUDA available: {torch.cuda.is_available()}')"
+}
+
+function gcode() {
+  if [[ $1 == "init" ]]; then
+    "$BPY" "$BASHFUL_DIR/python/scripts/gcode.py" init
+  else
+    "$BPY" "$BASHFUL_DIR/python/scripts/gcode.py" "$*" 2>/dev/null
+  fi
 }
