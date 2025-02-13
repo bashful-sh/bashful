@@ -52,7 +52,7 @@ if __name__ == "__main__":
     # Initialise model and log the status
     if len(sys.argv) == 2 and sys.argv[1] == "init":
         model_init()
-        error_and_exit("Initialised local generative code model.")
+        exit()
     # Inference model and log response only
     if len(sys.argv) > 1:
         # User Input
