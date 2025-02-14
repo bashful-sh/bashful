@@ -27,18 +27,17 @@ function bpy-update() {
   deactivate
 }
 
-function serve() {
+# Simple Local Only Web-Server
+function bpy-serve() {
   bpy -m http.server "$@"
 }
 
-function torch() {
-  bpy -c "import torch; print(f'PyTorch: {torch.__version__}'); print(f'CUDA available: {torch.cuda.is_available()}')"
+# Simple Local Only (GPU/CPU) LLM runner
+function llm() {
+  bpy "$BASHFUL_DIR/python/scripts/llm.py" "$1" "$2" 2>/dev/null
 }
 
-function gcode() {
-  if [[ $1 == "init" ]]; then
-    "$BPY" "$BASHFUL_DIR/python/scripts/gcode.py" init
-  else
-    "$BPY" "$BASHFUL_DIR/python/scripts/gcode.py" "$*" 2>/dev/null
-  fi
+# Production Ready (CPU/GPU) LLM runner
+function vllm() {
+  bpy "$BASHFUL_DIR/python/scripts/vllm.py" "$1" "$2" 2>/dev/null
 }
