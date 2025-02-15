@@ -14,11 +14,13 @@ Click any of these links to go to the resource.
 
 Bashful is a bash profile and package manager. That means you can download and install it, then it will become your interface for managing your bash environment and the appearance of your terminal output.
 
+It also includes a superset of bash which upgrades your bash experience for the modern era.
+
 ### Install & Download
 
 Go to [bashful-sh.github.io](https://bashful-sh.github.io/) and follow the instructions.
 
-### Basic and Advanced Usage
+### Usage Instructions
 
 Go to [the github wiki](https://github.com/bashful-sh/bashful/wiki) for basic and advanced documentation.
 
