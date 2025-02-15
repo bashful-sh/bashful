@@ -17,8 +17,8 @@ dsc_1b_id = "deepseek-ai/deepseek-coder-1.3b-instruct"
 dsc_6b_id = "deepseek-ai/deepseek-coder-6.7b-instruct"
 dsc_7b_id = "deepseek-ai/deepseek-coder-7b-instruct"
 dsc_33b_id = "deepseek-ai/deepseek-coder-33b-instruct"
-dscv2_id = "deepseek-ai/DeepSeek-Coder-V2-Instruct"
 dscv2_lite_id = "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct"
+dscv2_id = "deepseek-ai/DeepSeek-Coder-V2-Instruct"
 
 # Application
 debug = False
@@ -31,17 +31,15 @@ system_message = {
         "You are an AI code generation tool. "
         "The user will describe something and you will begin by thinking about what the user has described, "
         "and if it is possible to code it. "
-        "You must at all cost remember to start every message you send with <think> and end your thoughts with </think> and the actual code that will be sent to the user to answer their question, always wrap that code in code blocks like this <code> </code> or markdown compatible syntax."
-        "If you decide it is possible to code up, "
-        "you will then respond only with the exact code snippet you would apply to the their description. "
-        "Do not explain anything. "
-        "Do not waste your time speaking to the user. "
-        "Just simply only ever reply to them with your code snippet block."
+        "You must at all cost remember to start every message you send with <think> and end your thoughts with </think> "
+        "and the actual code that will be sent to the user to answer their question, always wrap that code in code blocks like this <code> </code> "
+        "You do not need to explain anything to the user, just simply only ever reply to them with your code snippet block. "
+        "However if you need to 'think' out loud, then you are free to do so."
     ),
 }
 
 
-def init_model(model_id: str) -> None:
+def init_model(model_id: str, device_type: str) -> None:
     """
     Loads the model of a given id into memory
     """
@@ -58,7 +56,32 @@ def init_model(model_id: str) -> None:
         global model
         model = AutoModelForCausalLM.from_pretrained(model_id, trust_remote_code=True)
 
-    init_with_cpu()
+    def log_cuda_info():
+        memory_allocated = torch.cuda.memory_allocated() / 1024 / 1024 / 1024
+        memory_reserved = torch.cuda.memory_reserved() / 1024 / 1024 / 1024
+        memory_max_reserved = torch.cuda.max_memory_reserved() / 1024 / 1024 / 1024
+        log("  memory_allocated:", memory_allocated, "GB")
+        log("  memory_reserved: ", memory_reserved, "GB")
+        log("  max_memory_reserved:", memory_max_reserved, "GB")
+
+    has_cuda = torch.cuda.is_available()
+    log("CUDA AVAILABLE:", has_cuda)
+    if has_cuda:
+        log("  Pre-load model info --:")
+        log_cuda_info()
+
+    if not has_cuda or device_type == "CPU":
+        return init_with_cpu()
+
+    try:
+        init_with_gpu()
+        log("  Post-load model status --:")
+        log_cuda_info()
+        return
+    except Exception as exception:
+        log(exception)
+
+    return init_with_cpu()
 
 
 def error_and_exit(error_message: str):
@@ -132,12 +155,12 @@ def append_response_to_context(response: str, role: str = "assistant") -> None:
     )
 
 
-def run_inference(model_id: str, user_prompt: str) -> None:
+def run_inference(model_id: str, user_prompt: str, device_type: str) -> None:
     """
     Executes inference of the model associated with the provided model_id
     """
     # Prepare prompt
-    init_model(model_id)
+    init_model(model_id, device_type)
     sanitized_prompt = sanitize_prompt(user_prompt)
     append_prompt_to_context(sanitized_prompt)
 
@@ -171,7 +194,6 @@ def save_messages() -> None:
     with open(log_file_path, "w") as file:
         to_save = messages[:5]
         json.dump(to_save, file, indent=2)
-        log(f"SAVED LAST ({len(to_save)}) MESSAGES:", to_save)
 
 
 def load_messages() -> list:
@@ -227,55 +249,91 @@ def main():
     The main entry point function for executing llm.py from the
     bashful command line.
     """
-    global messages
+    global messages, debug
     log("Starting llm instance...")
 
     # System
     model_id = sys.argv[1]
     user_prompt = sys.argv[2]
-    log("Read command line (", model_id, ",", user_prompt, ")\n")
+    device_type = sys.argv[3].upper()
+    should_debug = sys.argv[4] == "debug"
+    log(
+        "Command line input recieved: ( MODEL =",
+        model_id,
+        ", PROMPT =",
+        user_prompt,
+        ", DEVICE =",
+        device_type,
+        ", DEBUG =",
+        should_debug,
+        ")\n",
+    )
+    if should_debug:
+        debug = True
 
-    # Model Aliases
-    if model_id == "clear":
-        clear_messages()
-        exit()
-    elif model_id == "code":
-        model_id = dscv2_lite_id
-    elif len(model_id) == "":
-        error_and_exit("Provide a `model_id` as the first argument.")
+    # Arg (1) Model Identifier
+    match model_id:
+        case "clear":
+            exit(clear_messages())
+        case "code1b":
+            model_id = dsc_1b_id
+        case "code6b":
+            model_id = dsc_6b_id
+        case "code7b":
+            model_id = dsc_7b_id
+        case "code":
+            model_id = dscv2_lite_id
+        case _:
+            error_and_exit("Provide a valid `model_id` as the first argument.")
     log("MODEL ID:", model_id)
 
-    # Input Handler
-    if user_prompt == "init":
-        exit(init_model(model_id))
-    if len(user_prompt) == 0:
-        error_and_exit("Provide a `prompt` as the second argument.")
+    # Arg (2) User Prompt
+    match user_prompt:
+        case "init":
+            exit(init_model(model_id, device_type))
+        case "":
+            error_and_exit("Provide a valid `user_prompt` as the second argument.")
     log("USER PROMPT:", user_prompt)
+
+    # Arg (3) Device Type
+    match device_type:
+        case "GPU" | "CPU":
+            pass
+        case _:
+            device_type = "default"
+    log("DEVICE TYPE:", device_type)
 
     # Preprocess Context
     messages = load_messages()
-    log("MESSAGE LOG:", messages, "\n")
+    log("MESSAGE LOG:", messages)
 
     # Inference Handler
-    original_stdout = sys.stdout
-    sys.stdout = open(os.devnull, "w")
+    if not debug:
+        original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, "w")
+
     try:
-        out = run_inference(model_id, user_prompt)
+        out = run_inference(model_id, user_prompt, device_type)
         out = extract_code_snippet(out)
     except Exception as exception:
         out = str(exception)
-    sys.stdout = original_stdout
+
+    if not debug:
+        sys.stdout = original_stdout
 
     # Output Handler
     if out.startswith("<code>"):
         out = out[6:]
     if out.endswith("</code>"):
         out = out[:-7]
-    print(out.strip())
+    if debug:
+        print("\n\nOUTPUT:\n" + out.strip() + "\n\n")
+    else:
+        print(out.strip())
 
     # Postprocess Context
     save_messages()
-    log("\nMESSAGE LOG:", messages)
+    log("MESSAGE LOG:", messages)
 
 
 if __name__ == "__main__":

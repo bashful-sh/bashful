@@ -17,10 +17,12 @@ alias bpy.pip='$BPIP'
 alias bpy.env='source $BVENV'
 alias bpy.lib='$BPY -m pip freeze'
 
+# Executes a built-in Python script
 function bpy-script() {
   bpy "$BASHFUL_DIR/python/scripts/$1.py"
 }
 
+# Install and Upgrade from Python requirements.txt
 function bpy-update() {
   source "$BPY_VENV/bin/activate"
   pip install --upgrade -r "$BASHFUL_DIR/python/requirements.txt"
@@ -34,7 +36,7 @@ function bpy-serve() {
 
 # Simple Local Only (GPU/CPU) LLM runner
 function llm() {
-  bpy "$BASHFUL_DIR/python/scripts/llm.py" "$1" "$2" 2>/dev/null
+  bpy "$BASHFUL_DIR/python/scripts/llm.py" "$1" "$2" "$3" "$4" 2>/dev/null
 }
 
 # Production Ready (CPU/GPU) LLM runner
