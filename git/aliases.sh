@@ -1,5 +1,6 @@
 #!/bin/bash
 
+alias status="git status"
 alias add="git add"
 alias add*="git add ."
 alias commit="git commit -m"
