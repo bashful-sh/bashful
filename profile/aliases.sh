@@ -7,7 +7,8 @@
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # bash: navigation
-alias e="exit"
+alias q="exit"  # For those vim habits
+alias qa="exit" # For those vim habits
 alias n="nvim ."
 alias c="cd .."
 alias cc="cd ../.."
