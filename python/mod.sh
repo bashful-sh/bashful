@@ -36,10 +36,10 @@ function bpy-serve() {
 
 # Simple Local Only (GPU/CPU) LLM runner
 function llm() {
-  bpy "$BASHFUL_DIR/python/scripts/llm.py" "$1" "$2" "$3" "$4" 2>/dev/null
+  bpy "$BASHFUL_DIR/python/scripts/llm_runner.py" "$1" "$2" "$3" "$4" 2>/dev/null
 }
 
 # Production Ready (CPU/GPU) LLM runner
 function vllm() {
-  bpy "$BASHFUL_DIR/python/scripts/vllm.py" "$1" "$2" 2>/dev/null
+  bpy "$BASHFUL_DIR/python/scripts/vllm_runner.py" "$1" "$2" 2>/dev/null
 }
