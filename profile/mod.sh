@@ -52,3 +52,7 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+function bashful() {
+  . "$HOME/.bashful/main.sh"
+}
