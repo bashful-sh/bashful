@@ -1,6 +1,4 @@
 #!/bin/bash
-# profile/mod.sh
-#
 # Default built-in bash profile for bashful.
 
 HISTCONTROL=ignoreboth
