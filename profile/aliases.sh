@@ -10,6 +10,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 alias q="exit"  # For those vim habits
 alias qa="exit" # For those vim habits
 alias n="nvim ."
+alias cl="clear"  # shortcut
+alias cls="clear" # incase you have
 alias c="cd .."
 alias cc="cd ../.."
 if [ -x /usr/bin/dircolors ]; then
