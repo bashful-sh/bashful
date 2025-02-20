@@ -52,5 +52,7 @@ if ! shopt -oq posix; then
 fi
 
 function bashful() {
-  . "$HOME/.bashful/main.sh"
+  if [[ $1 == "refresh" ]]; then
+    . "$HOME/.bashful/main.sh"
+  fi
 }
