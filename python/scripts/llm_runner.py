@@ -13,6 +13,7 @@ log_file_name = "llm.messages"
 log_file_path = os.path.join(bashful_tmp_directory, log_file_name)
 
 # LLM
+dsc_1776 = "perplexity-ai/r1-1776"
 dsc_1b_id = "deepseek-ai/deepseek-coder-1.3b-instruct"
 dsc_6b_id = "deepseek-ai/deepseek-coder-6.7b-instruct"
 dsc_7b_id = "deepseek-ai/deepseek-coder-7b-instruct"
