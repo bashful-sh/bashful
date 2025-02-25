@@ -75,7 +75,7 @@ function transcription-client() {
   cd "$working_dir" && bpy "$main_file_name" "$@"
 }
 
-# Simple Text to Speech API using Google Cloud
+# API: Text to Speech using Google Cloud
 function gtts() {
   user_working_dir=$(pwd)
   working_dir="$BASHFUL_DIR/python/libs/gtts"
@@ -83,7 +83,7 @@ function gtts() {
   cd "$working_dir" && bpy "$main_file_name" "$@"
 }
 
-# Simple Speech to Text API using Google Cloud
+# API: Speech to Text using Google Cloud
 function gstt() {
   user_working_dir=$(pwd)
   working_dir="$BASHFUL_DIR/python/libs/gstt"
