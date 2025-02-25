@@ -18,6 +18,7 @@ kaldialign
 soundfile
 # Google Cloud
 google-cloud-datastore
+google-cloud-speech
 google-cloud-texttospeech
 # System
 sounddevice

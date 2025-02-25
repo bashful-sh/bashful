@@ -11,11 +11,14 @@ export BPY_BIN="$BPY_VENV/bin"
 export BPY="$BPY_BIN/python3"
 export BPIP="$BPY_BIN/python3 -m pip"
 export BVENV="$BPY_BIN/activate"
+export LD_LIBRARY_PATH
 
-alias bpy='$BPY'
-alias bpy.pip='$BPIP'
-alias bpy.env='source $BVENV'
-alias bpy.lib='$BPY -m pip freeze'
+LD_LIBRARY_PATH=$("$BPY" -c 'import os; import nvidia.cublas.lib; import nvidia.cudnn.lib; print(os.path.dirname(nvidia.cublas.lib.__file__) + ":" + os.path.dirname(nvidia.cudnn.lib.__file__))')
+
+# Bashful Python
+function bpy() {
+  "$BPY" "$@"
+}
 
 # Executes a built-in Python script
 function bpy-script() {
@@ -34,12 +37,48 @@ function bpy-serve() {
   bpy -m http.server "$@"
 }
 
-# Simple Local Only (GPU/CPU) LLM runner
+# Simple Local Only (GPU and/or CPU) LLM runner
 function llm() {
-  bpy "$BASHFUL_DIR/python/scripts/llm_runner.py" "$1" "$2" "$3" "$4" 2>/dev/null
+  user_working_dir=$(pwd)
+  script_working_dir="$BASHFUL_DIR/python/scripts"
+  script_name="llm_runner.py"
+
+  cd "$script_working_dir" || exit
+  bpy "$script_working_dir/$script_name" "$1" "$2" "$3" "$4" 2>/dev/null
+  cd "$user_working_dir" || exit
 }
 
-# Production Ready (CPU/GPU) LLM runner
+# Production Ready (GPU only) LLM runner
 function vllm() {
-  bpy "$BASHFUL_DIR/python/scripts/vllm_runner.py" "$1" "$2" 2>/dev/null
+  user_working_dir=$(pwd)
+  script_working_dir="$BASHFUL_DIR/python/scripts"
+  script_name="vllm_runner.py"
+
+  cd "$script_working_dir" || exit
+  bpy "$script_name" "$1" "$2" 2>/dev/null
+  cd "$user_working_dir" || exit
+}
+
+# Simple Universal (CPU/GPU) based (AI/ML/LLM) Model Server
+function model-server() {
+  user_working_dir=$(pwd)
+  working_dir="$BASHFUL_DIR/python/libs/server"
+  main_file_name="server.py"
+  cd "$working_dir" && bpy "$main_file_name" "$@"
+}
+
+# Simple Local Only Live Audio Transcription Client
+function transcription-client() {
+  user_working_dir=$(pwd)
+  working_dir="$BASHFUL_DIR/python/libs/server"
+  main_file_name="client.py"
+  cd "$working_dir" && bpy "$main_file_name" "$@"
+}
+
+# Simple Text to Speech Engine using Google Cloud API
+function gtts() {
+  user_working_dir=$(pwd)
+  working_dir="$BASHFUL_DIR/python/libs/gtts"
+  main_file_name="main.py"
+  cd "$working_dir" && bpy "$main_file_name" "$@"
 }
