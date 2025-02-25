@@ -3,11 +3,11 @@ flask
 flask-cors
 
 # LLM / VLLM Runner
-vllm>=0.7.0
-torch>=2.5.0
-torchaudio
-tokenizers>=0.21.0
-transformers>=4.48.0
+#vllm>=0.7.0
+#torch>=2.5.0
+#torchaudio
+#tokenizers>=0.21.0
+#transformers>=4.48.0
 
 # Whisper
 openai-whisper>=20240930
