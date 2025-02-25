@@ -1,24 +1,31 @@
+# Web
+flask
+flask-cors
+
 # LLM / VLLM Runner
 vllm>=0.7.0
 torch>=2.5.0
+torchaudio
 tokenizers>=0.21.0
 transformers>=4.48.0
+
 # Whisper
-PyAudio
-faster-whisper>=1.1.0
-torch
-torchaudio
-websockets
-onnxruntime>=1.16.0
-scipy
-websocket-client
-numba
 openai-whisper>=20240930
-kaldialign
-soundfile
+
+#PyAudio
+#faster-whisper>=1.1.0
+#websockets
+#onnxruntime>=1.16.0
+#scipy
+#websocket-client
+#numba
+#kaldialign
+#soundfile
+
 # Google Cloud
 google-cloud-datastore
 google-cloud-speech
 google-cloud-texttospeech
+
 # System
 sounddevice

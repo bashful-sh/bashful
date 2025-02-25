@@ -75,6 +75,14 @@ function transcription-client() {
   cd "$working_dir" && bpy "$main_file_name" "$@"
 }
 
+# Simple Speech to Text using a local Flask Server
+function lstt() {
+  user_working_dir=$(pwd)
+  working_dir="$BASHFUL_DIR/python/libs/lstt"
+  main_file_name="main.py"
+  cd "$working_dir" && bpy "$main_file_name" "$@"
+}
+
 # API: Text to Speech using Google Cloud
 function gtts() {
   user_working_dir=$(pwd)
