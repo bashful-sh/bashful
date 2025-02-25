@@ -28,4 +28,5 @@ google-cloud-speech
 google-cloud-texttospeech
 
 # System
+redis
 sounddevice
