@@ -5,10 +5,6 @@ from ollama import chat, ChatResponse
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-debug = False
-local_api = "http://127.0.0.1:11434/api/generate"
-production_api = "https://api.easter.company/llm"
-
 app = Flask(__name__)
 CORS(app)
 
@@ -62,7 +58,6 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     if len(args.prompt) == 0:
-        debug = args.debug
         app.run(debug=args.debug, host="127.0.0.1", port=args.port)
     else:
         r = prompt(args.prompt)
