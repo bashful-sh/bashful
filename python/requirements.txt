@@ -1,6 +1,7 @@
 # Web
 flask
 flask-cors
+gunicorn
 
 # LLM / VLLM Runner
 #vllm>=0.7.0

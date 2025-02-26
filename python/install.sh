@@ -9,9 +9,13 @@ venv="$BASHFUL_DIR/.tmp/pyvenv"
 if ! [ -d "$venv" ]; then
   sudo apt-get update && sudo apt-get upgrade && sudo apt-get autoremove && sudo apt-get clean
   sudo apt-get install --upgrade -y python3 python3-venv python3-dev portaudio19-dev wget curl pulseaudio apt-transport-https ca-certificates gnupg
+
+  # TODO: for some reason this gets aborted (also doesn't automatically 'y' to y/n prompts)
   curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
   echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
   sudo apt-get update && sudo apt-get install google-cloud-cli
+  # ---------------------------------------------------------------------------------------
+
   python3 -m venv "$venv"
   source "$BPY_BIN/activate"
   pip install --no-cache-dir -U "pip>=24"

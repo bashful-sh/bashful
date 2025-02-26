@@ -60,7 +60,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     if len(args.prompt) == 0:
-        app.run(debug=args.debug, port=args.port)
+        app.run(debug=args.debug, host="127.0.0.1", port=args.port)
     else:
         r = prompt(args.prompt)
         print(r)

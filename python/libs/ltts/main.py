@@ -62,4 +62,4 @@ if __name__ == "__main__":
         help="Which mode to run the server in.",
     )
     args = parser.parse_args()
-    app.run(debug=args.debug, port=args.port)
+    app.run(debug=args.debug, host="127.0.0.1", port=args.port)

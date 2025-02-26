@@ -70,7 +70,7 @@ if __name__ == "__main__":
         "--debug",
         "-d",
         type=bool,
-        default=True,
+        default=False,
         help="Which mode to run the server in.",
     )
     parser.add_argument(
@@ -97,4 +97,4 @@ if __name__ == "__main__":
     if args.use_redis:
         redis_client = redis.Redis(host=args.host, port=args.port, db=0)
 
-    app.run(debug=args.debug, port=args.port)
+    app.run(debug=args.debug, host="127.0.0.1", port=args.port)
