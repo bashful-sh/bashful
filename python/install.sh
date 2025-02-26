@@ -8,7 +8,7 @@ venv="$BASHFUL_DIR/.tmp/pyvenv"
 # Python Virtual Environment
 if ! [ -d "$venv" ]; then
   sudo apt-get update && sudo apt-get upgrade && sudo apt-get autoremove && sudo apt-get clean
-  sudo apt-get install --upgrade -y python3 python3-venv python3-dev portaudio19-dev wget curl pulseaudio apt-transport-https ca-certificates gnupg
+  sudo apt-get install --upgrade -y python3 python3-venv python3-dev portaudio19-dev wget curl pulseaudio apt-transport-https ca-certificates gnupg ffmpeg
 
   # TODO: for some reason this gets aborted (also doesn't automatically 'y' to y/n prompts)
   curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
