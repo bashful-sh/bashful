@@ -94,7 +94,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    if args.use_redis:
-        redis_client = redis.Redis(host=args.host, port=args.port, db=0)
+    if args.use_redis or not args.debug:
+        redis_client = redis.Redis(host=args.redis_host, port=args.redis_port, db=0)
 
     app.run(debug=args.debug, host="127.0.0.1", port=args.port)
