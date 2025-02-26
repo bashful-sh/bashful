@@ -98,3 +98,11 @@ function gstt() {
   main_file_name="main.py"
   cd "$working_dir" && bpy "$main_file_name" "$@"
 }
+
+# LOCAL: Dexter Command Line Interface
+function dex() {
+  user_working_dir=$(pwd)
+  working_dir="$BASHFUL_DIR/python/libs/llm"
+  main_file_name="main.py"
+  cd "$working_dir" && bpy "$main_file_name" -t "$*"
+}

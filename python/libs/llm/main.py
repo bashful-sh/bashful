@@ -1,6 +1,7 @@
 import argparse
 import requests
 
+from ollama import chat, ChatResponse
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -12,14 +13,17 @@ app = Flask(__name__)
 CORS(app)
 
 
-def prompt(text: str):
-    response = requests.post(
-        local_api if debug else production_api,
-        json={"model": "dexter:0.5b", "prompt": text, "stream": False},
+def prompt(text: str, model: str = "dexter-0.5b"):
+    response: ChatResponse = chat(
+        model=model,
+        messages=[
+            {
+                "role": "user",
+                "content": text,
+            },
+        ],
     )
-    response.raise_for_status()
-    ollama_response = response.json()
-    return ollama_response["response"]
+    return response.message.content
 
 
 @app.route("/prompt", methods=["POST"])
