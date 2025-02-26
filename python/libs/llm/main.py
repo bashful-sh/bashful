@@ -6,7 +6,7 @@ from flask_cors import CORS
 
 debug = False
 local_api = "http://127.0.0.1:11434/api/generate"
-production_api = "https://api.easter.company/ollama"
+production_api = "https://api.easter.company/llm"
 
 app = Flask(__name__)
 CORS(app)
@@ -15,11 +15,7 @@ CORS(app)
 def prompt(text: str):
     response = requests.post(
         local_api if debug else production_api,
-        json={
-            "model": "dexter:0.5b",
-            "prompt": text,
-            "stream": False,
-        },
+        json={"model": "dexter:0.5b", "prompt": text, "stream": False},
     )
     response.raise_for_status()
     ollama_response = response.json()
