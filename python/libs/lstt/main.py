@@ -14,7 +14,7 @@ model_cache = {}
 redis_client = None
 
 
-def load_model(size="small"):
+def load_model(size="tiny"):
     model = None
 
     if redis_client is not None:
