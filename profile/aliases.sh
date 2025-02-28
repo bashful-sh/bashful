@@ -32,7 +32,15 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+# web-dev: run brave in development mode
+function brave-dev() {
+  brave-browser --user-data-dir=/tmp/brave-dev-profile --disable-web-security
+}
+
 # ssh: devices
-alias ssh.laptop="ssh $LAPTOP_USERNAME@$LAPTOP_IP -p 22"
-alias ssh.desktop="ssh $DESKTOP_USERNAME@$DESKTOP_IP -p 22"
-alias ssh.server="ssh $SERVER_USERNAME@$SERVER_IP -p 22"
+function ssh.server() {
+  ssh "$SERVER_USERNAME@$SERVER_IP" -p 22
+}
+
+#alias ssh.laptop="ssh $LAPTOP_USERNAME@$LAPTOP_IP -p 22"
+#alias ssh.desktop="ssh $DESKTOP_USERNAME@$DESKTOP_IP -p 22"
