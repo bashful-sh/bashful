@@ -93,7 +93,6 @@ def load_stt_model(size="tiny.en"):
 
 
 @app.route("/tts", methods=["POST"])
-@cross_origin()
 def tts_api_endpoint():
     try:
         request_data = request.get_json()
@@ -107,7 +106,6 @@ def tts_api_endpoint():
 
 
 @app.route("/llm", methods=["POST"])
-@cross_origin()
 def prompt_api_endpoint():
     request_data = request.get_json()
     session_data = request_data.get("session", "")
@@ -123,7 +121,6 @@ def prompt_api_endpoint():
 
 
 @app.route("/stt", methods=["POST"])
-@cross_origin()
 def transcription_api_endpoint():
     if "audio" not in request.files:
         return jsonify({"error": "No audio file part"}), 400
