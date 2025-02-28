@@ -14,7 +14,7 @@ model_cache = {}
 redis_client = None
 
 
-def load_model(size="tiny"):
+def load_model(size="base"):
     model = None
 
     if redis_client is not None:
@@ -25,8 +25,13 @@ def load_model(size="tiny"):
                 model = pickle.loads(cached_model)
             else:
                 model = whisper.load_model(size)
-                # Redis model cache expires after 1 day (86400 seconds)
-                redis_client.set(f"whisper_model:{size}", pickle.dumps(model), ex=86400)
+                redis_client.set(
+                    f"whisper_model:{size}",
+                    pickle.dumps(model),
+                    ex=(
+                        86400 * 7
+                    ),  # Expire cached model after 7 days. (will also cause the model to update)
+                )
             return model
         except redis.exceptions.ConnectionError as e:
             print(f"Redis connection error: {e}")
