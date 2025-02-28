@@ -24,7 +24,7 @@ def record_audio(duration=5, samplerate=16000):
     return recording, samplerate
 
 
-def transcribe_audio(audio_data, samplerate, language_code="en-US"):
+def transcribe_audio(audio_data, samplerate, language_code="en-GB"):
     """Transcribes audio using Google Cloud Speech-to-Text."""
     client = speech.SpeechClient()
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
         "--language",
         "-l",
         type=str,
-        default="en-US",
+        default="en-GB",
         help="Language code for transcription.",
     )
     parser.add_argument(
