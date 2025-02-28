@@ -45,7 +45,6 @@ def generate_chat_response(chat_history, model="dexter-0.5b") -> str:
       The generated text response from the model, or None if there was an error.
     """
     try:
-        print("\n\n", chat_history, "\n\n")
         response = requests.post(
             "http://localhost:11434/api/chat",
             headers={"Content-Type": "application/json"},
@@ -59,7 +58,6 @@ def generate_chat_response(chat_history, model="dexter-0.5b") -> str:
         response_json = response.json()
         response_message = response_json["message"]
         response_message_content = response_message["content"]
-        print("\n\n", response_message, "\n\n")
         return str(response_message_content)
     except requests.exceptions.RequestException as e:
         print(f"Error generating chat response: {e}")
@@ -190,7 +188,7 @@ if __name__ == "__main__":
     if args.use_redis or not args.debug:
         redis_client = redis.Redis(host=args.redis_host, port=args.redis_port, db=0)
 
-    if len(args.prompt) == 0:
+    if len(args.chat) == 0:
         app.run(debug=args.debug, host="127.0.0.1", port=args.port)
 
     else:
