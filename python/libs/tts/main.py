@@ -9,12 +9,13 @@ gcloud auth application-default login
 import argparse
 
 from google.cloud import texttospeech
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from flask import Flask, request, jsonify, Response
 
-tts_client = texttospeech.TextToSpeechClient()
 app = Flask(__name__)
 CORS(app)
+
+tts_client = texttospeech.TextToSpeechClient()
 
 
 def tts(text: str, language: str = "en-GB", voice: str = "en-GB-Chirp-HD-D"):
@@ -33,6 +34,7 @@ def tts(text: str, language: str = "en-GB", voice: str = "en-GB-Chirp-HD-D"):
 
 
 @app.route("/tts", methods=["POST"])
+@cross_origin()
 def tts_api_endpoint():
     try:
         request_data = request.get_json()

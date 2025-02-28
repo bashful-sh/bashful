@@ -1,33 +1,54 @@
 import argparse
 import requests
 
-from ollama import chat, ChatResponse
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 CORS(app)
 
 
-def prompt(text: str, model: str = "dexter-0.5b"):
-    response: ChatResponse = chat(
-        model=model,
-        messages=[
-            {
-                "role": "user",
-                "content": text,
+def generate_chat_response(chat_history, model="dexter-0.5b") -> str:
+    """
+    Generates a chat response from the Ollama server.
+
+    Args:
+      model: The name of the chat model on the Ollama server.
+      chat_history: A list of dictionaries representing the chat history.
+                     Each dictionary should have "role" and "content" keys.
+
+    Returns:
+      The generated text response from the model, or None if there was an error.
+    """
+    try:
+        print("\n\n", chat_history, "\n\n")
+        response = requests.post(
+            "http://localhost:11434/api/chat",
+            headers={"Content-Type": "application/json"},
+            json={
+                "model": model,
+                "messages": chat_history,
+                "stream": False,
             },
-        ],
-    )
-    return response.message.content
+        )
+        response.raise_for_status()
+        response_json = response.json()
+        response_message = response_json["message"]
+        response_message_content = response_message["content"]
+        print("\n\n", response_message, "\n\n")
+        return str(response_message_content)
+    except requests.exceptions.RequestException as e:
+        print(f"Error generating chat response: {e}")
+        return str(e)
 
 
-@app.route("/prompt", methods=["POST"])
+@app.route("/llm", methods=["POST"])
+@cross_origin()
 def prompt_api_endpoint():
     request_data = request.get_json()
-    user_prompt = request_data.get("prompt", "")
+    session_data = request_data.get("session", "")
     try:
-        llm_response = prompt(user_prompt)
+        llm_response = generate_chat_response(chat_history=session_data["history"])
         return jsonify({"response": llm_response}), 200
     except requests.exceptions.RequestException as e:
         return jsonify({"error": f"Error communicating with Ollama server: {e}"}), 500
@@ -60,5 +81,5 @@ if __name__ == "__main__":
     if len(args.prompt) == 0:
         app.run(debug=args.debug, host="127.0.0.1", port=args.port)
     else:
-        r = prompt(args.prompt)
+        r = generate_chat_response([{"role": "user", "content": args.prompt}])
         print(r)

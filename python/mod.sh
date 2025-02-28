@@ -29,7 +29,7 @@ function bpy.update() {
 
 # Simple Local Only Web-Server
 function bpy.http() {
-  bpy -m http.server "$@"
+  bpy -m http.server -b 127.0.0.1
 }
 
 # Simple Local Only (GPU and/or CPU) LLM runner
@@ -75,7 +75,7 @@ function bpy.stt() {
   user_working_dir=$(pwd)
   working_dir="$BASHFUL_DIR/python/libs/stt"
   main_file_name="main.py"
-  cd "$working_dir" && bpy "$main_file_name" "$@"
+  cd "$working_dir" && bpy "$main_file_name" --debug true --use_redis true
 }
 
 # Simple Text to Speech using a local Flask Server
@@ -83,7 +83,7 @@ function bpy.tts() {
   user_working_dir=$(pwd)
   working_dir="$BASHFUL_DIR/python/libs/tts"
   main_file_name="main.py"
-  cd "$working_dir" && bpy "$main_file_name" "$@"
+  cd "$working_dir" && bpy "$main_file_name" --debug true
 }
 
 # LOCAL LLM: Dexter Command Line Interface
@@ -91,13 +91,15 @@ function bpy.llm() {
   user_working_dir=$(pwd)
   working_dir="$BASHFUL_DIR/python/libs/llm"
   main_file_name="main.py"
-  cd "$working_dir" && bpy "$main_file_name" -t "$*"
+  cd "$working_dir" && bpy "$main_file_name" --debug true
 }
 
 # LLM SERVER: Runs a Dexter Server
 function bpy.dexter() {
   user_working_dir=$(pwd)
-  bpy.stt --debug true --use_redis true &
-  bpy.tts --debug true &
-  bpy.llm --debug true
+  working_dir="$BASHFUL_DIR/python/libs/llm"
+  main_file_name="main.py"
+  cd "$working_dir" && bpy "$main_file_name" -t "$*"
 }
+
+alias dex="bpy.dexter"

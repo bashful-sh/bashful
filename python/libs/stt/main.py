@@ -5,7 +5,7 @@ import argparse
 import tempfile
 
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 CORS(app)
@@ -42,7 +42,8 @@ def load_model(size="base"):
     return model_cache[size]
 
 
-@app.route("/transcribe", methods=["POST"])
+@app.route("/stt", methods=["POST"])
+@cross_origin()
 def transcription_api_endpoint():
     if "audio" not in request.files:
         return jsonify({"error": "No audio file part"}), 400
@@ -57,7 +58,9 @@ def transcription_api_endpoint():
         with tempfile.NamedTemporaryFile(delete=True, suffix=".wav") as temp:
             audio_file.save(temp.name)
             result = model.transcribe(temp.name, language=None)
-        return jsonify({"text": result["text"], "language": result["language"]}), 200
+        return jsonify(
+            {"text": result["text"].strip(), "language": result["language"].strip()}
+        ), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

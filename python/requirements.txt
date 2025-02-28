@@ -3,9 +3,6 @@ flask
 flask-cors
 gunicorn
 
-# Ollama
-ollama
-
 # LLM / VLLM Runner
 #vllm>=0.7.0
 #torch>=2.5.0
