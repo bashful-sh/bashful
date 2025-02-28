@@ -20,25 +20,20 @@ function bpy() {
   "$BPY" "$@"
 }
 
-# Executes a built-in Python script
-function bpy-script() {
-  bpy "$BASHFUL_DIR/python/scripts/$1.py"
-}
-
 # Install and Upgrade from Python requirements.txt
-function bpy-update() {
+function bpy.update() {
   source "$BPY_VENV/bin/activate"
   pip install --upgrade -r "$BASHFUL_DIR/python/requirements.txt"
   deactivate
 }
 
 # Simple Local Only Web-Server
-function bpy-serve() {
+function bpy.http() {
   bpy -m http.server "$@"
 }
 
 # Simple Local Only (GPU and/or CPU) LLM runner
-function llm() {
+function bpy.llm_runner() {
   user_working_dir=$(pwd)
   script_working_dir="$BASHFUL_DIR/python/scripts"
   script_name="llm_runner.py"
@@ -49,7 +44,7 @@ function llm() {
 }
 
 # Production Ready (GPU only) LLM runner
-function vllm() {
+function bpy.vllm_runner() {
   user_working_dir=$(pwd)
   script_working_dir="$BASHFUL_DIR/python/scripts"
   script_name="vllm_runner.py"
@@ -60,7 +55,7 @@ function vllm() {
 }
 
 # Simple Universal (CPU/GPU) based (AI/ML/LLM) Model Server
-function model-server() {
+function bpy.ts() {
   user_working_dir=$(pwd)
   working_dir="$BASHFUL_DIR/python/libs/server"
   main_file_name="server.py"
@@ -68,7 +63,7 @@ function model-server() {
 }
 
 # Simple Local Only Live Audio Transcription Client
-function transcription-client() {
+function bpy.tc() {
   user_working_dir=$(pwd)
   working_dir="$BASHFUL_DIR/python/libs/server"
   main_file_name="client.py"
@@ -76,33 +71,33 @@ function transcription-client() {
 }
 
 # Simple Speech to Text using a local Flask Server
-function lstt() {
+function bpy.stt() {
   user_working_dir=$(pwd)
-  working_dir="$BASHFUL_DIR/python/libs/lstt"
+  working_dir="$BASHFUL_DIR/python/libs/stt"
   main_file_name="main.py"
   cd "$working_dir" && bpy "$main_file_name" "$@"
 }
 
-# API: Text to Speech using Google Cloud
-function gtts() {
+# Simple Text to Speech using a local Flask Server
+function bpy.tts() {
   user_working_dir=$(pwd)
-  working_dir="$BASHFUL_DIR/python/libs/gtts"
+  working_dir="$BASHFUL_DIR/python/libs/tts"
   main_file_name="main.py"
   cd "$working_dir" && bpy "$main_file_name" "$@"
 }
 
-# API: Speech to Text using Google Cloud
-function gstt() {
-  user_working_dir=$(pwd)
-  working_dir="$BASHFUL_DIR/python/libs/gstt"
-  main_file_name="main.py"
-  cd "$working_dir" && bpy "$main_file_name" "$@"
-}
-
-# LOCAL: Dexter Command Line Interface
-function dex() {
+# LOCAL LLM: Dexter Command Line Interface
+function bpy.llm() {
   user_working_dir=$(pwd)
   working_dir="$BASHFUL_DIR/python/libs/llm"
   main_file_name="main.py"
   cd "$working_dir" && bpy "$main_file_name" -t "$*"
+}
+
+# LLM SERVER: Runs a Dexter Server
+function bpy.dexter() {
+  user_working_dir=$(pwd)
+  bpy.stt --debug true --use_redis true &
+  bpy.tts --debug true &
+  bpy.llm --debug true
 }
