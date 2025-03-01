@@ -2,6 +2,7 @@
 flask
 flask-cors
 gunicorn
+pyOpenSSL
 
 # LLM / VLLM Runner
 #vllm>=0.7.0
