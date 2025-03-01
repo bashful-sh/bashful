@@ -27,9 +27,19 @@ function bpy.update() {
   deactivate
 }
 
-# Simple Local Only Web-Server
+# Simple HTTP Local Development Server
 function bpy.http() {
   bpy -m http.server -b 127.0.0.1
+}
+
+# Simple HTTPS Local Development Server
+function bpy.https() {
+  uwd=$(pwd)
+  lib_dir="$BASHFUL_DIR/python/libs/https"
+  lib_main="main.py"
+  cd "$lib_dir" || exit
+  bpy "$lib_main"
+  cd "$uwd" || exit
 }
 
 # Simple Local Only (GPU and/or CPU) LLM runner
