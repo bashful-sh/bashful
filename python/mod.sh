@@ -12,8 +12,8 @@ export BPY="$BPY_BIN/python3"
 export BPIP="$BPY_BIN/python3 -m pip"
 export BVENV="$BPY_BIN/activate"
 
-LD_LIBRARY_PATH=$("$BPY" -c 'import os; import nvidia.cublas.lib; import nvidia.cudnn.lib; print(os.path.dirname(nvidia.cublas.lib.__file__) + ":" + os.path.dirname(nvidia.cudnn.lib.__file__))')
-export LD_LIBRARY_PATH
+#LD_LIBRARY_PATH=$("$BPY" -c 'import os; import nvidia.cublas.lib; import nvidia.cudnn.lib; print(os.path.dirname(nvidia.cublas.lib.__file__) + ":" + os.path.dirname(nvidia.cudnn.lib.__file__))')
+#export LD_LIBRARY_PATH
 
 # Bashful Python
 function bpy() {
@@ -36,7 +36,7 @@ function bpy.http() {
 function bpy.https() {
   lib_dir="$BASHFUL_DIR/python/libs/https"
   lib_main="main.py"
-  bpy "$lib_dir/$lib_main"
+  bpy "$lib_dir/$lib_main" "$@"
 }
 
 # Simple Local Only (GPU and/or CPU) LLM runner
