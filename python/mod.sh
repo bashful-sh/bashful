@@ -34,12 +34,9 @@ function bpy.http() {
 
 # Simple HTTPS Local Development Server
 function bpy.https() {
-  uwd=$(pwd)
   lib_dir="$BASHFUL_DIR/python/libs/https"
   lib_main="main.py"
-  cd "$lib_dir" || exit
-  bpy "$lib_main"
-  cd "$uwd" || exit
+  bpy "$lib_dir/$lib_main"
 }
 
 # Simple Local Only (GPU and/or CPU) LLM runner
