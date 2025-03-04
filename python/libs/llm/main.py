@@ -18,19 +18,8 @@ redis_client = None
 
 
 def tts(text: str, language: str = "en-GB", voice: str = "en-GB-Chirp-HD-D") -> bytes:
-    """
-    Generates a voice from text using google clouds text-to-speech engine.
-
-    Args:
-        text: the speech to generate.
-        language: the target language of the spoken voice.
-        voice: the specific voice model to use.
-
-    Returns:
-        LINEAR16 Audio Bytes
-    """
     input_text = texttospeech.SynthesisInput(text=text)
-    voice = texttospeech.VoiceSelectionParams(
+    voice_model = texttospeech.VoiceSelectionParams(
         language_code=language,
         name=voice,
     )
@@ -38,21 +27,16 @@ def tts(text: str, language: str = "en-GB", voice: str = "en-GB-Chirp-HD-D") -> 
         audio_encoding=texttospeech.AudioEncoding.LINEAR16, speaking_rate=1
     )
     response = tts_client.synthesize_speech(
-        request={"input": input_text, "voice": voice, "audio_config": audio_config}
+        request={
+            "input": input_text,
+            "voice": voice_model,
+            "audio_config": audio_config,
+        }
     )
     return response.audio_content
 
 
 def load_chat_model(model: str = "dexter-0.5b") -> requests.Response:
-    """
-    Sends a message to the model server to load and cache the target model.
-
-    Args:
-        model: the name of the chat model to load.
-
-    Return:
-        None
-    """
     return requests.post(
         "http://localhost:11434/api/chat",
         headers={"Content-Type": "application/json"},
@@ -64,17 +48,6 @@ def load_chat_model(model: str = "dexter-0.5b") -> requests.Response:
 
 
 def generate_chat_response(chat_history: list, model: str = "dexter-0.5b") -> str:
-    """
-    Generates a chat response from the Ollama server.
-
-    Args:
-      model: The name of the chat model on the model server.
-      chat_history: A list of dictionaries representing the chat history.
-                     Each dictionary should have "role" and "content" keys.
-
-    Returns:
-      The generated text response from the model, or an error message if there was an error.
-    """
     try:
         response = requests.post(
             "http://localhost:11434/api/chat",
@@ -96,16 +69,7 @@ def generate_chat_response(chat_history: list, model: str = "dexter-0.5b") -> st
         return f"Error: {e}"
 
 
-def load_stt_model(size: str = "tiny.en") -> whisper.model:
-    """
-    Handles the loading, caching, and invalidation of the speech-to-text model.
-
-    Args:
-        size: the name (and size) of the model to load.
-
-    Return:
-        the cached or newly loaded model.
-    """
+def load_stt_model(size: str = "tiny.en"):
     model = None
 
     if redis_client is not None:
@@ -113,7 +77,7 @@ def load_stt_model(size: str = "tiny.en") -> whisper.model:
             redis_client.ping()
             cached_model = redis_client.get(f"stt_model:{size}")
 
-            if cached_model:
+            if cached_model and isinstance(cached_model, bytes):
                 model = pickle.loads(cached_model)
             else:
                 model = whisper.load_model(size)
@@ -124,7 +88,7 @@ def load_stt_model(size: str = "tiny.en") -> whisper.model:
                 )
             return model
 
-        except redis.exceptions.ConnectionError as e:
+        except Exception as e:
             print(f"Redis connection error: {e}")
 
     if size not in model_cache:
@@ -184,7 +148,10 @@ def transcription_api_endpoint():
             result = model.transcribe(temp.name, language=None)
 
         return jsonify(
-            {"text": result["text"].strip(), "language": result["language"].strip()}
+            {
+                "text": str(result["text"]).strip(),
+                "language": str(result["language"]).strip(),
+            }
         ), 200
 
     except Exception as e:
