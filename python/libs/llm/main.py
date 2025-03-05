@@ -69,7 +69,7 @@ def generate_chat_response(chat_history: list, model: str = "dexter-0.5b") -> st
         return f"Error: {e}"
 
 
-def load_stt_model(size: str = "tiny.en"):
+def load_stt_model(size: str = "small"):
     model = None
 
     if redis_client is not None:
