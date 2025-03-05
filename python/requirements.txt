@@ -6,6 +6,8 @@ flask
 flask-cors
 gunicorn
 pyOpenSSL
+aiohttp
+websockets
 
 # LLM
 #vllm>=0.7.0
