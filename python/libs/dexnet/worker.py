@@ -122,7 +122,7 @@ async def worker_socket_process():
                         await handle_work_load(websocket, message)
                     else:
                         break
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(0.5)
         except websockets.exceptions.ConnectionClosedError:
             logging.error("Connection closed. Retrying...")
             time.sleep(10)
