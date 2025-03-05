@@ -110,3 +110,10 @@ function bpy.dexter() {
 }
 
 alias dex="bpy.dexter"
+
+function bpy.dexnet-worker() {
+  user_working_dir=$(pwd)
+  working_dir="$BASHFUL_DIR/python/libs/dexnet"
+  main_file_name="worker.py"
+  cd "$working_dir" && bpy "$main_file_name" --wss_uri wss://api.easter.company/dexnet
+}
