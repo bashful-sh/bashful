@@ -43,11 +43,8 @@ async def get_llm_response(data: dict) -> dict:
             ) as response:
                 response.raise_for_status()
                 return await response.json()
-    except aiohttp.ClientError as e:
-        print(f"Error fetching LLM response: {e}")
-        return {"response": DEFAULT_ERROR_RESPONSE}
-    except json.JSONDecodeError as e:
-        print(f"Error decoding JSON response: {e}")
+    except Exception as e:
+        logging.error(f"Error Processing Prompt: {e}")
         return {"response": DEFAULT_ERROR_RESPONSE}
 
 
