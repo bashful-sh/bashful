@@ -1,5 +1,5 @@
 # Standard
-numpy<2.0.0
+numpy
 
 # Web
 flask
@@ -9,28 +9,7 @@ pyOpenSSL
 aiohttp
 websockets
 
-# LLM
-#vllm>=0.7.0
-#torch>=2.5.0
-#torchaudio
-#tokenizers>=0.21.0
-#transformers>=4.48.0
-
-# Whisper
-openai-whisper
-
-#PyAudio
-#faster-whisper>=1.1.0
-#websockets
-#onnxruntime>=1.16.0
-#scipy
-#websocket-client
-#numba
-#kaldialign
-#soundfile
-
 # Google Cloud
-google-cloud-datastore
 google-cloud-speech
 google-cloud-texttospeech
 

@@ -97,10 +97,6 @@ function rmtmp() {
 }
 
 inherit_builtin profile
-inherit_builtin apt
 inherit_builtin python
 inherit_builtin git
 inherit_builtin bun
-inherit_builtin redis
-inherit_builtin redis-cloud
-inherit_builtin ollama

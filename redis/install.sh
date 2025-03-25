@@ -38,5 +38,3 @@ function health_check_redis_server() {
     health_check_verify_redis_server
   fi
 }
-
-health_check_redis_server

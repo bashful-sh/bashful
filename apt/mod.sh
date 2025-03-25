@@ -1,7 +1,4 @@
 #!/bin/bash
-#
-#
-#
 
 # apt update
 alias update="sudo apt update"
